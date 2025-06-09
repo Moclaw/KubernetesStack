@@ -2,13 +2,41 @@
 
 ## Setup Instructions
 
-### 1. Install K3s
+### Option 1: Docker Compose (Recommended for Development)
+
+#### 1. Start Monitoring Stack
+```bash
+# Start services
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+
+#### 2. Access Services
+- Grafana: http://localhost:3000 (admin/admin123)
+- Prometheus: http://localhost:9090
+- Node Exporter: http://localhost:9100
+
+#### 3. Stop Services
+```bash
+docker-compose down
+# or to remove volumes
+docker-compose down -v
+```
+
+### Option 2: Kubernetes Deployment
+
+#### 1. Install K3s
 ```bash
 chmod +x k3s-setup.sh
 ./k3s-setup.sh
 ```
 
-### 2. Deploy Monitoring Stack
+#### 2. Deploy Monitoring Stack
 ```bash
 chmod +x deploy.sh
 ./deploy.sh
@@ -32,13 +60,32 @@ Add CNAME record in Cloudflare:
 
 ## Access
 
+### Docker Compose
+- Grafana: http://localhost:3000
+- Prometheus: http://localhost:9090
+
+### Kubernetes
 - Grafana: https://grafana.moclawr.com
 - Default credentials: admin/admin123
 
 ## Monitoring
 
+### Docker Compose
+```bash
+docker-compose ps
+docker-compose logs grafana
+docker-compose logs prometheus
+```
+
+### Kubernetes
 Check deployment status:
 ```bash
 kubectl get pods -n monitoring
 kubectl get pods -n cloudflare
 ```
+
+## Configuration
+
+- Prometheus config: `prometheus/prometheus.yml`
+- Grafana datasources: `grafana/provisioning/datasources/`
+- Grafana dashboards: `grafana/provisioning/dashboards/`
